@@ -1,3 +1,5 @@
+using TheFinalPassword.Managers;
+
 namespace TheFinalPassword;
 using System.Drawing;
 
@@ -7,11 +9,14 @@ public partial class Form1 : Form
     {
         InitializeComponent();
         SetupUI();
+        commandParser = new CommandParser(fileSystemManager);
     }
     private RichTextBox txtTerminalOutput;
     private TextBox txtCommandInput;
     private Label lblMissionDisplay;
     private Label lblStatusMessage;
+    private CommandParser commandParser;
+    private FileSystemManager fileSystemManager = new FileSystemManager();
 
     private void SetupUI()
     {
@@ -68,6 +73,8 @@ public partial class Form1 : Form
         {
             string input = txtCommandInput.Text;
             txtTerminalOutput.AppendText("> " + input + "\n");
+            string response = commandParser.ProcessCommand(input);
+            txtTerminalOutput.AppendText(response + "\n");
             txtCommandInput.Clear();
             e.SuppressKeyPress = true; // stops the "ding" sound
         }
