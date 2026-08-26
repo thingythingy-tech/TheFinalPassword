@@ -8,15 +8,17 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+        fileSystemManager = new FileSystemManager(player);
         SetupUI();
-        commandParser = new CommandParser(fileSystemManager);
+        commandParser = new CommandParser(fileSystemManager, player);
     }
-    private RichTextBox txtTerminalOutput;
-    private TextBox txtCommandInput;
-    private Label lblMissionDisplay;
-    private Label lblStatusMessage;
-    private CommandParser commandParser;
-    private FileSystemManager fileSystemManager = new FileSystemManager();
+    private RichTextBox txtTerminalOutput = null!;
+    private TextBox txtCommandInput = null!;
+    private Label lblMissionDisplay = null!;
+    private Label lblStatusMessage = null!;
+    private CommandParser commandParser = null!;
+    private Player player = new Player();
+    private FileSystemManager fileSystemManager = null!;
 
     private void SetupUI()
     {
@@ -67,7 +69,7 @@ public partial class Form1 : Form
         this.Controls.Add(txtCommandInput);
     }
 
-    private void TxtCommandInput_KeyDown(object sender, KeyEventArgs e)
+    private void TxtCommandInput_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter)
         {
@@ -80,3 +82,5 @@ public partial class Form1 : Form
         }
     }
 }
+
+
