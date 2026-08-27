@@ -9,8 +9,9 @@ public partial class Form1 : Form
     {
         InitializeComponent();
         fileSystemManager = new FileSystemManager(player);
+        networkManager = new NetworkManager();
         SetupUI();
-        commandParser = new CommandParser(fileSystemManager, player);
+        commandParser = new CommandParser(fileSystemManager, player,networkManager);
     }
     private RichTextBox txtTerminalOutput = null!;
     private TextBox txtCommandInput = null!;
@@ -19,6 +20,7 @@ public partial class Form1 : Form
     private CommandParser commandParser = null!;
     private Player player = new Player();
     private FileSystemManager fileSystemManager = null!;
+    private NetworkManager networkManager = null!;
 
     private void SetupUI()
     {

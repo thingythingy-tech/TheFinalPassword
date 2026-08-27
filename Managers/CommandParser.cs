@@ -4,11 +4,13 @@ public class CommandParser
 {
     private readonly FileSystemManager fileSystemManager;
     private readonly Player player;
+    private readonly NetworkManager networkManager;
 
-    public CommandParser(FileSystemManager fsm, Player player)
+    public CommandParser(FileSystemManager fsm, Player player, NetworkManager networkManager)
     {
         fileSystemManager = fsm;
         this.player = player;
+        this.networkManager = networkManager;
     }
 
     public string ProcessCommand(string rawInput)
@@ -23,7 +25,7 @@ public class CommandParser
         switch (command)
         {
             case "help":
-                return "Commands: help, look, cd, open, inventory";
+                return "Commands: help, look, cd, open, inventory, connect, login";
             case "look":
             case "ls":
                 return fileSystemManager.ListContents();
@@ -33,6 +35,10 @@ public class CommandParser
                 return fileSystemManager.OpenFile(argument);
             case "inventory":
                 return player.DisplayInventory();
+            case"connect":
+                return networkManager.ConnectServer(argument);
+            case "login":
+                return networkManager.Authenicate(argument);
             default:
                 return $"Unknown command: '{command}'. Type 'help' for a list of commands.";
         }
