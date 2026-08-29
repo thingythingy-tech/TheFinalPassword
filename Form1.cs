@@ -10,7 +10,9 @@ public partial class Form1 : Form
         InitializeComponent();
         fileSystemManager = new FileSystemManager(player);
         networkManager = new NetworkManager();
+        missionManager = new MissionManager();
         SetupUI();
+        lblMissionDisplay.Text = missionManager.GetDisplayText();
         commandParser = new CommandParser(fileSystemManager, player,networkManager);
     }
     private RichTextBox txtTerminalOutput = null!;
@@ -21,6 +23,7 @@ public partial class Form1 : Form
     private Player player = new Player();
     private FileSystemManager fileSystemManager = null!;
     private NetworkManager networkManager = null!;
+    private MissionManager missionManager = null!;
 
     private void SetupUI()
     {
@@ -78,11 +81,28 @@ public partial class Form1 : Form
             string input = txtCommandInput.Text;
             txtTerminalOutput.AppendText("> " + input + "\n");
             string response = commandParser.ProcessCommand(input);
+
+            if (CompletesCurrentMission(input, response))
+            {
+                response += "\n" + missionManager.CompleteCurrentMission();
+                lblMissionDisplay.Text = missionManager.GetDisplayText();
+            }
+
             txtTerminalOutput.AppendText(response + "\n");
             txtCommandInput.Clear();
             e.SuppressKeyPress = true; // stops the "ding" sound
         }
     }
+
+    private static bool CompletesCurrentMission(string input, string response)
+    {
+        string[] parts = input.Trim().Split(' ', 2);
+        return parts.Length == 2
+               && parts[0].Equals("open", StringComparison.OrdinalIgnoreCase)
+               && parts[1].Equals("note1.txt", StringComparison.OrdinalIgnoreCase)
+               && !response.StartsWith("File '", StringComparison.OrdinalIgnoreCase);
+    }
 }
+
 
 
