@@ -11,8 +11,16 @@ public class SaveManager
     {
         string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true});
         File.WriteAllText(savePath, json);
+        
+        Console.WriteLine(Path.GetFullPath(savePath));
     }
-    public SaveData LoadGame()
+
+    private bool SaveExists()
+    {
+        return File.Exists(savePath);
+    }
+    
+    public SaveData? LoadGame()
     {
         if (!SaveExists()) return null;
         string json = File.ReadAllText(savePath);

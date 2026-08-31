@@ -1,16 +1,19 @@
 namespace TheFinalPassword.Managers;
+using TheFinalPassword.Models;
 
 public class CommandParser
 {
     private readonly FileSystemManager fileSystemManager;
     private readonly Player player;
     private readonly NetworkManager networkManager;
+    private readonly SaveManager saveManager;
 
     public CommandParser(FileSystemManager fsm, Player player, NetworkManager networkManager)
     {
         fileSystemManager = fsm;
         this.player = player;
         this.networkManager = networkManager;
+        saveManager = new SaveManager();
     }
 
     public string ProcessCommand(string rawInput)
@@ -39,6 +42,30 @@ public class CommandParser
                 return networkManager.ConnectServer(argument);
             case "login":
                 return networkManager.Authenicate(argument);
+            case "save":
+            {
+                SaveData saveData = new SaveData
+                {
+                    PlayerName = player.Name,
+                    Inventory = player.Inventory,
+                    Progress = player.Progress,
+                    Reputation = player.Reputation,
+                    AuthenicationStatus = networkManager.AuthenicationStatus
+                };
+                saveManager.SaveGame(saveData);
+                return "Game saved successfully.";
+            }
+            case "load":
+            {
+                SaveData? saveData = saveManager.LoadGame();
+                if (saveData == null) return "No save found.";
+                player.Name = saveData.PlayerName;
+                player.Inventory = saveData.Inventory;
+                player.Progress = saveData.Progress;
+                player.Reputation = saveData.Reputation;
+                networkManager.AuthenicationStatus = saveData.AuthenicationStatus;
+                return "Game loaded successfully.";
+            }
             default:
                 return $"Unknown command: '{command}'. Type 'help' for a list of commands.";
         }
