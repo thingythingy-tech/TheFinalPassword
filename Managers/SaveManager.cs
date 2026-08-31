@@ -1,4 +1,4 @@
-﻿using TheFinalPassword.Models;
+using TheFinalPassword.Models;
 
 namespace TheFinalPassword.Managers;
 using System.Text.Json;
@@ -9,21 +9,19 @@ public class SaveManager
 
     public void SaveGame(SaveData data)
     {
-        string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true});
+        string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(savePath, json);
-        
-        Console.WriteLine(Path.GetFullPath(savePath));
     }
 
-    private bool SaveExists()
-    {
-        return File.Exists(savePath);
-    }
-    
     public SaveData? LoadGame()
     {
         if (!SaveExists()) return null;
         string json = File.ReadAllText(savePath);
         return JsonSerializer.Deserialize<SaveData>(json);
+    }
+
+    private bool SaveExists()
+    {
+        return File.Exists(savePath);
     }
 }
