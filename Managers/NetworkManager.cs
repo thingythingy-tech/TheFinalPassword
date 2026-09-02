@@ -21,7 +21,7 @@ public class NetworkManager
         AuthenicationStatus = !server.RequiresAuth;
         return AuthenicationStatus 
             ? $"Connected to {name}." 
-            : $"Connected to {name}. Authentication required - use 'login<password>' .";
+            : $"Connected to {name}. Authentication required - use 'login <password>' .";
         
     }
 

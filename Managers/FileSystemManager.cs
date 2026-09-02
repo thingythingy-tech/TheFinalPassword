@@ -8,7 +8,8 @@ public class FileSystemManager
     private readonly Dictionary<string, string> collectibleFiles = new()
     {
         { "note1.txt", "Mainframe Prefix Clue" },
-        { "recovery.txt", "Recovery Word Clue" }
+        { "recovery.txt", "Recovery Word Clue" },
+        { "combine.txt",  "Password Combination Clue"}
     };
 
     public VirtualDirectory Root;
@@ -21,7 +22,8 @@ public class FileSystemManager
         Root = new VirtualDirectory("root");
         var docs = new VirtualDirectory("documents", Root);
         docs.Files.Add(new VirtualFile("note1.txt", "The password to the mainframe starts with 'SPACE'."));
-        docs.Files.Add(new VirtualFile("recovery.txt", "Old recovery logs say the final word is 'LOCK'."));
+        docs.Files.Add(new VirtualFile("recovery.txt", "Old recovery logs indicate the mainframe password suffix is 'BAR123'."));
+        docs.Files.Add(new VirtualFile("combine.txt", "The two password clues must be combined to recover the mainframe password."));
         Root.SubDirectories.Add(docs);
         CurrentDirectory = Root;
     }

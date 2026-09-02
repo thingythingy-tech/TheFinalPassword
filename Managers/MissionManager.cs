@@ -16,7 +16,7 @@ public class MissionManager
     {
         if (CurrentMission.Completed)
         {
-            return $"Mission complete: {CurrentMission.Title}\nReward: {CurrentMission.Reward}";
+            return $"Mission complete: {CurrentMission.Title} ✓\nReward: {CurrentMission.Reward}";
         }
 
         return $"Mission: {CurrentMission.Title}\nObjectives: {string.Join(", ", CurrentMission.Objectives)}";
