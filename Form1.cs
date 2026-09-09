@@ -8,6 +8,8 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+        // Initialise the managers used by the game and pass the required objects
+        // between them so each class has responsibility for a specific part of the game.
         fileSystemManager = new FileSystemManager(player);
         networkManager = new NetworkManager();
         missionManager = new MissionManager();
@@ -15,6 +17,9 @@ public partial class Form1 : Form
         lblMissionDisplay.Text = missionManager.GetDisplayText();
         commandParser = new CommandParser(fileSystemManager, player,networkManager);
     }
+
+    // Store references to the controls and managers so they can be updated
+    // while the game is running.
     private RichTextBox txtTerminalOutput = null!;
     private TextBox txtCommandInput = null!;
     private Label lblMissionDisplay = null!;
@@ -25,6 +30,8 @@ public partial class Form1 : Form
     private NetworkManager networkManager = null!;
     private MissionManager missionManager = null!;
 
+    // Creates the terminal interface programmatically so the layout and appearance
+    // of the game can be controlled from one method.
     private void SetupUI()
     {
         this.Text = "Terminal Puzzle Game";
@@ -68,12 +75,15 @@ public partial class Form1 : Form
         };
         txtCommandInput.KeyDown += TxtCommandInput_KeyDown;
 
+        // Add each control to the form so it becomes visible to the player.
         this.Controls.Add(txtTerminalOutput);
         this.Controls.Add(lblMissionDisplay);
         this.Controls.Add(lblStatusMessage);
         this.Controls.Add(txtCommandInput);
     }
 
+    // Processes the player's command when Enter is pressed, sends it to the
+    // CommandParser and displays the returned response in the terminal.
     private void TxtCommandInput_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter)
@@ -82,6 +92,8 @@ public partial class Form1 : Form
             txtTerminalOutput.AppendText("> " + input + "\n");
             string response = commandParser.ProcessCommand(input);
 
+            // Check whether the player's command has completed the current mission.
+            // This keeps mission progression separate from the command processing itself.
             if (CompletesCurrentMission(input, response))
             {
                 response += "\n" + missionManager.CompleteCurrentMission();
@@ -103,6 +115,3 @@ public partial class Form1 : Form
                && !response.StartsWith("File '", StringComparison.OrdinalIgnoreCase);
     }
 }
-
-
-
