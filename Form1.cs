@@ -41,7 +41,7 @@ public partial class Form1 : Form
             ForeColor = Color.LightGreen,
             Font = new Font("Consolas", 11),
             ReadOnly = true,
-            BorderStyle = BorderStyle.FixedSingle
+            BorderStyle = BorderStyle.FixedSingle,
         };
 
         lblMissionDisplay = new Label
@@ -74,6 +74,7 @@ public partial class Form1 : Form
         this.Controls.Add(lblMissionDisplay);
         this.Controls.Add(lblStatusMessage);
         this.Controls.Add(txtCommandInput);
+        this.Shown += (sender, e) => txtCommandInput.Focus();
     }
 
     private void TxtCommandInput_KeyDown(object? sender, KeyEventArgs e)
