@@ -8,11 +8,12 @@ public class NetworkManager
     public Server ConnectedServer = null!;
     public bool AuthenicationStatus;
 
+    // The List of known servers that the player can access. 
     private List<Server> knownServers = new List<Server>
     {
         new Server("mainframe", "SPACEBAR123",true)
     };
-
+    // Connects to the named server and returns whether a login is needed.
     public string ConnectServer(string name)
     {
         var server = knownServers.FirstOrDefault( s => s.Name == name);
@@ -24,7 +25,7 @@ public class NetworkManager
             : $"Connected to {name}. Authentication required - use 'login <password>' .";
         
     }
-
+    // Checks the attempted password against the connected server's password.
     public string Authenicate(string attemptedPassword)
     {
         if (ConnectedServer == null) return "Not connected to any server.";

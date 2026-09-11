@@ -1,5 +1,6 @@
 ﻿namespace TheFinalPassword.Models;
 
+// A container for the values that should be written to the save file.
 public class SaveData
 {
     public string PlayerName { get; set; }

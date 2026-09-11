@@ -5,6 +5,7 @@ namespace TheFinalPassword.Managers;
 public class FileSystemManager
 {
     private readonly Player player;
+    // Opening these files adds their clue to the player's inventory for the first time only.
     private readonly Dictionary<string, string> collectibleFiles = new()
     {
         { "note1.txt", "Mainframe Prefix Clue" },
@@ -14,11 +15,12 @@ public class FileSystemManager
 
     public VirtualDirectory Root;
     public VirtualDirectory CurrentDirectory;
-
+    // Creates the starting virtual file system and places the player in the first directory.
     public FileSystemManager(Player player)
     {
         this.player = player;
 
+        // The virtual filesystem is built in memory because the game world is separate from the real computer's files.
         Root = new VirtualDirectory("root");
         var docs = new VirtualDirectory("documents", Root);
         docs.Files.Add(new VirtualFile("note1.txt", "The password to the mainframe starts with 'SPACE'."));
@@ -27,7 +29,7 @@ public class FileSystemManager
         Root.SubDirectories.Add(docs);
         CurrentDirectory = Root;
     }
-
+    // Lists all directories and files in the player's current virtual directory.
     public string ListContents()
     {
         var items = new List<string>();
@@ -35,7 +37,7 @@ public class FileSystemManager
         items.AddRange(CurrentDirectory.Files.Select(f => f.Name));
         return items.Count == 0 ? "(empty)" : string.Join("\n", items);
     }
-
+    // Changes the player's current directory.
     public string ChangeDirectory(string name)
     {
         if (name == ". .")
@@ -54,7 +56,7 @@ public class FileSystemManager
         CurrentDirectory = target;
         return "Moved to" + CurrentDirectory.Name;
     }
-
+    // Opens a file in the current directory and adds any clue inside it to the player's inventory.
     public string OpenFile(string name)
     {
         var file = CurrentDirectory.Files.FirstOrDefault(f => f.Name == name);

@@ -5,9 +5,11 @@ using System.Drawing;
 
 public partial class Form1 : Form
 {
+    // Builds the main game window and wires together the systems that handle commands, files, missions, and network access.
     public Form1()
     {
         InitializeComponent();
+        // Share the same player object between managers so inventory and progress stay in sync.
         fileSystemManager = new FileSystemManager(player);
         networkManager = new NetworkManager();
         missionManager = new MissionManager();
@@ -24,7 +26,7 @@ public partial class Form1 : Form
     private FileSystemManager fileSystemManager = null!;
     private NetworkManager networkManager = null!;
     private MissionManager missionManager = null!;
-
+    // Creates the terminal-style controls used by the game.
     private void SetupUI()
     {
         this.Text = "Terminal Puzzle Game";
@@ -53,9 +55,9 @@ public partial class Form1 : Form
         lblStatusMessage = new Label
         {
             Left = 10, Top = 480, Width = 860, Height = 20,
-            ForeColor = Color.OrangeRed,
+            ForeColor = Color.LightGreen,
             Font = new Font("Consolas", 9),
-            Text = ""
+            Text = "Type 'help' for a list of commands"
         };
 
         txtCommandInput = new TextBox
@@ -80,8 +82,10 @@ public partial class Form1 : Form
         {
             string input = txtCommandInput.Text;
             txtTerminalOutput.AppendText("> " + input + "\n");
+            // Route the typed command through the parser so the form only needs to display the result.
             string response = commandParser.ProcessCommand(input);
 
+            // Mission progress is checked after command processing so successful file opens can trigger completion.
             if (CompletesCurrentMission(input, response))
             {
                 response += "\n" + missionManager.CompleteCurrentMission();
@@ -90,10 +94,10 @@ public partial class Form1 : Form
 
             txtTerminalOutput.AppendText(response + "\n");
             txtCommandInput.Clear();
-            e.SuppressKeyPress = true; // stops the "ding" sound
+            e.SuppressKeyPress = true;
         }
     }
-
+    // Checks whether the latest command completed the current mission objective.
     private static bool CompletesCurrentMission(string input, string response)
     {
         string[] parts = input.Trim().Split(' ', 2);
